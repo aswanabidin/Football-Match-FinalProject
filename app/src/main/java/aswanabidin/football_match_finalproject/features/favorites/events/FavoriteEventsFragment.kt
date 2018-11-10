@@ -9,95 +9,59 @@ import android.view.View
 import android.view.ViewGroup
 
 import aswanabidin.football_match_finalproject.R
+import aswanabidin.football_match_finalproject.adapter.EventsAdapter
+import aswanabidin.football_match_finalproject.database.DatabaseManager
+import aswanabidin.football_match_finalproject.features.favorites.FavoritesContracts
+import aswanabidin.football_match_finalproject.model.event.EventModel
+import aswanabidin.football_match_finalproject.router.openEventsDetail
+import kotlinx.android.synthetic.main.layout_base_lists.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class FavoriteEventsFragment : Fragment(), FavoritesContracts.EventsView {
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FavoriteEventsFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FavoriteEventsFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
-class FavoriteEventsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
+    private val mDb by lazy { DatabaseManager(context!!) }
+    private val mPresenter by lazy { FavoriteEventsPresenter(this, mDb) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.layout_base_lists, container, false)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_events, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        launch(UI) { mPresenter.fetchFavoriteEvents() }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavoriteEventsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoriteEventsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun showEvents(events: List<EventModel>) {
+        rv_data?.let {
+            with(rv_data) {
+                layoutManager = android.support.v7.widget.LinearLayoutManager(context)
+                adapter = EventsAdapter(events) { event ->
+                    activity?.openEventsDetail(event.id)
                 }
             }
+        }
     }
+
+    override fun showLoading() {
+        rv_data?.visibility = View.GONE
+        clp_data?.show()
+        hidePlaceholder()
+    }
+
+    override fun hideLoading() {
+        rv_data?.visibility = View.VISIBLE
+        clp_data?.hide()
+        hidePlaceholder()
+    }
+
+    override fun showPlaceholder() {
+        rv_data?.visibility = View.GONE
+        clp_data?.hide()
+        ph_data?.visibility = View.VISIBLE
+    }
+
+    override fun hidePlaceholder() {
+        ph_data?.visibility = View.GONE
+    }
+
 }

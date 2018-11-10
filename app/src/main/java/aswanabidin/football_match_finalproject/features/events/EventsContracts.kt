@@ -82,7 +82,7 @@ class EventsContracts {
     interface LastPresenter {
 
         suspend fun fetchLeagues()
-        suspend fun fetchEvents()
+        suspend fun fetchEvents(leagueId: String)
 
     }
 
@@ -102,7 +102,7 @@ class EventsContracts {
 
     interface SearchPresenter {
 
-        suspend fun fetchSearhcEvents(keywords: String)
+        suspend fun fetchSearchEvents(keywords: String)
 
     }
 }

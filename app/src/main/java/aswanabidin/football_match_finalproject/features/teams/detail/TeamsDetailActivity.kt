@@ -32,6 +32,9 @@ class TeamsDetailActivity : AppCompatActivity(), TeamsContracts.DetailView {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         launch(UI) {
             mPresenter.fetchTeamDetail(intent?.getStringExtra("TEAM_ID") ?: "")

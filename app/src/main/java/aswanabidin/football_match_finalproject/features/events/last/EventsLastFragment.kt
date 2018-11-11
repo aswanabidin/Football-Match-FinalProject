@@ -61,7 +61,7 @@ class EventsLastFragment : Fragment(), EventsContracts.LastView {
                     }
                 }
             }
-        }
+        }   
     }
 
     override fun showLoading() {

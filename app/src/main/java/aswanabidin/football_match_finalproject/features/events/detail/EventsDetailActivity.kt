@@ -30,6 +30,9 @@ class EventsDetailActivity : AppCompatActivity(), EventsContracts.DetailView {
         setContentView(R.layout.activity_events_detail)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         launch(UI) {
             presenter.fetchEventDetail(intent?.getStringExtra("EVENT_ID") ?: "")
@@ -88,7 +91,7 @@ class EventsDetailActivity : AppCompatActivity(), EventsContracts.DetailView {
     }
 
     override fun showMenuAddToFavorite() {
-        addedToFavorite = true
+        addedToFavorite = false
         invalidateOptionsMenu()
     }
 

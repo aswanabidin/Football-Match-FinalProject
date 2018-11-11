@@ -23,6 +23,10 @@ class PlayersDetailActivity : AppCompatActivity(), PlayersContracts.DetailView{
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
 
         launch(UI) {
             presenter.fetchPlayerDetail(intent?.getStringExtra("PLAYER_ID") ?: "")

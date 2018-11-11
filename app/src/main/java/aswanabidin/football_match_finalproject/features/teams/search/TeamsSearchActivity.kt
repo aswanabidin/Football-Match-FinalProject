@@ -26,6 +26,9 @@ class TeamsSearchActivity : AppCompatActivity(), TeamsContracts.SearchView {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         hideLoading()
     }

@@ -28,6 +28,9 @@ class EventsSearchActivity : AppCompatActivity(), EventsContracts.SearchView {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         hideLoading()
     }

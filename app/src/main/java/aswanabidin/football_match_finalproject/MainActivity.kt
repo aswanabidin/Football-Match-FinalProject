@@ -20,15 +20,15 @@ class MainActivity : AppCompatActivity() {
         bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_events -> {
-//                    showEvents()
+                    showEvents()
                     true
                 }
                 R.id.nav_teams -> {
-//                    showTeams()
+                    showTeams()
                     true
                 }
                 R.id.nav_favorites -> {
-//                    showFavorites()
+                    showFavorites()
                     true
                 }
                 else -> false
